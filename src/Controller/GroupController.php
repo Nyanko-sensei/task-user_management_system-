@@ -2,13 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\UserGroup;
 use App\Repository\UserGroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
+use FOS\RestBundle\View\View;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class GroupController extends FOSRestController implements ClassResourceInterface
 {
+    private $entityManager;
+    private $userGroupRepository;
+
     public function __construct(
         EntityManagerInterface $entityManager,
         UserGroupRepository $userGroupRepository
@@ -19,31 +26,72 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
 
     public function cgetAction()
     {
-        $articles = $this->userGroupRepository->findAll();
-        // In case our GET was a success we need to return a 200 HTTP OK response with the collection of article object
-        return View::create($articles, Response::HTTP_OK);
+        $userGroups = $this->userGroupRepository->findAll();
 
-//        die('test');
-//        $entities = $this->groupRepository->findAll();
-//        var_dump($entities);
-//
-//        $view = new View($entities);
-//        $view->setFormat('json');
-//        return $this->handleView($view);
+        $view = new View($userGroups);
+        $view->setFormat('json');
+        return $this->handleView($view);
     }
 
-//    public function getAction(): View
-//    {
-//        $articles = $this->articleRepository->findAll();
-//        // In case our GET was a success we need to return a 200 HTTP OK response with the collection of article object
-//        return View::create($articles, Response::HTTP_OK);
-//    }
-
-    public function getArticle(int $articleId): View
+    public function getAction(int $userGroupId)
     {
-        $article = $this->articleRepository->findById($articleId);
-        // In case our GET was a success we need to return a 200 HTTP OK response with the request object
-        return View::create($article, Response::HTTP_OK);
+        $userGroup = $this->userGroupRepository->find($userGroupId);
+
+        if (!$userGroup) {
+            throw new HttpException(404, "User group not found");
+        }
+
+        $view = new View($userGroup);
+        $view->setFormat('json');
+        return $this->handleView($view);
+    }
+
+    public function putAction(int $userGroupId, Request $request)
+    {
+        $userGroup = $this->userGroupRepository->find($userGroupId);
+
+        if (!$userGroup) {
+            throw new HttpException(404, "User not found");
+        }
+
+        $userGroup->setName($request->get('name'));
+        $this->entityManager->persist($userGroup);
+        $this->entityManager->flush();
+
+        $view = new View($userGroup);
+        $view->setFormat('json');
+        return $this->handleView($view);
+    }
+
+    public function postAction(Request $request)
+    {
+        $name = $request->get('name');
+        $userGroup = $this->userGroupRepository->findOneBy(['name' => $name]);
+        if ($userGroup) {
+            throw new HttpException(422, "User group with this name already exists");
+        }
+
+        $userGroup = new UserGroup();
+        $userGroup->setName($name);
+        $this->entityManager->persist($userGroup);
+        $this->entityManager->flush();
+
+        $view = new View($userGroup);
+        $view->setFormat('json');
+        return $this->handleView($view);
+    }
+
+    public function deleteAction(int $userGroupId)
+    {
+        $userGroup = $this->userGroupRepository->find($userGroupId);
+        if ($userGroup) {
+            $this->entityManager->remove($userGroup);
+            $this->entityManager->flush();
+        }
+
+        $view = new View([]);
+        $view->setFormat('json');
+        return $this->handleView($view);
     }
 
 }
