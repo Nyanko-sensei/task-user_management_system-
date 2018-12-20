@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -26,6 +28,16 @@ class User implements UserInterface
      * @ORM\Column(type="json")
      */
     private $roles = [];
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="Users")
+     */
+    private $Groups;
+
+    public function __construct()
+    {
+        $this->Groups = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -91,5 +103,33 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Group[]
+     */
+    public function getGroups(): Collection
+    {
+        return $this->Groups;
+    }
+
+    public function addGroup(Group $group): self
+    {
+        if (!$this->Groups->contains($group)) {
+            $this->Groups[] = $group;
+            $group->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroup(Group $group): self
+    {
+        if ($this->Groups->contains($group)) {
+            $this->Groups->removeElement($group);
+            $group->removeUser($this);
+        }
+
+        return $this;
     }
 }
