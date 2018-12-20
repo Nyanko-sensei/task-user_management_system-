@@ -2,21 +2,21 @@
 
 namespace App\Repository;
 
-use App\Entity\Group;
+use App\Entity\UserGroup;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Group|null find($id, $lockMode = null, $lockVersion = null)
- * @method Group|null findOneBy(array $criteria, array $orderBy = null)
- * @method Group[]    findAll()
- * @method Group[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method UserGroup|null find($id, $lockMode = null, $lockVersion = null)
+ * @method UserGroup|null findOneBy(array $criteria, array $orderBy = null)
+ * @method UserGroup[]    findAll()
+ * @method UserGroup[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GroupRepository extends ServiceEntityRepository
+class UserGroupRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Group::class);
+        parent::__construct($registry, UserGroup::class);
     }
 
     // /**

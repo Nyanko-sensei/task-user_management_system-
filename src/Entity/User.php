@@ -30,13 +30,13 @@ class User implements UserInterface
     private $roles = [];
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="Users")
+     * @ORM\ManyToMany(targetEntity="App\Entity\UserGroup", mappedBy="Users")
      */
-    private $Groups;
+    private $UserGroups;
 
     public function __construct()
     {
-        $this->Groups = new ArrayCollection();
+        $this->UserGroups = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -106,28 +106,28 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Group[]
+     * @return Collection|UserGroup[]
      */
-    public function getGroups(): Collection
+    public function getUserGroups(): Collection
     {
-        return $this->Groups;
+        return $this->UserGroups;
     }
 
-    public function addGroup(Group $group): self
+    public function addUserGroup(UserGroup $userGroup): self
     {
-        if (!$this->Groups->contains($group)) {
-            $this->Groups[] = $group;
-            $group->addUser($this);
+        if (!$this->UserGroups->contains($userGroup)) {
+            $this->UserGroups[] = $userGroup;
+            $userGroup->addUser($this);
         }
 
         return $this;
     }
 
-    public function removeGroup(Group $group): self
+    public function removeUserGroup(UserGroup $userGroup): self
     {
-        if ($this->Groups->contains($group)) {
-            $this->Groups->removeElement($group);
-            $group->removeUser($this);
+        if ($this->UserGroups->contains($userGroup)) {
+            $this->UserGroups->removeElement($userGroup);
+            $userGroup->removeUser($this);
         }
 
         return $this;

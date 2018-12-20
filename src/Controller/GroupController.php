@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\GroupRepository;
+use App\Repository\UserGroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -11,15 +11,15 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
 {
     public function __construct(
         EntityManagerInterface $entityManager,
-        GroupRepository $groupRepository
+        UserGroupRepository $userGroupRepository
     ) {
         $this->entityManager       = $entityManager;
-        $this->groupRepository     = $groupRepository;
+        $this->userGroupRepository = $userGroupRepository;
     }
 
     public function cgetAction()
     {
-        $articles = $this->groupRepository->findAll();
+        $articles = $this->userGroupRepository->findAll();
         // In case our GET was a success we need to return a 200 HTTP OK response with the collection of article object
         return View::create($articles, Response::HTTP_OK);
 

@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\UserGroupRepository")
  */
-class Group
+class UserGroup
 {
     /**
      * @ORM\Id()
@@ -24,7 +24,7 @@ class Group
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="Groups")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="UserGroups")
      */
     private $Users;
 
