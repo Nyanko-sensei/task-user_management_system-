@@ -34,6 +34,11 @@ class User implements UserInterface
      */
     private $UserGroups;
 
+    /**
+     * @ORM\Column(type="string", length=255, unique=true, nullable=true)
+     */
+    private $apiToken;
+
     public function __construct()
     {
         $this->UserGroups = new ArrayCollection();
@@ -129,6 +134,18 @@ class User implements UserInterface
             $this->UserGroups->removeElement($userGroup);
             $userGroup->removeUser($this);
         }
+
+        return $this;
+    }
+
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(string $apiToken): self
+    {
+        $this->apiToken = $apiToken;
 
         return $this;
     }

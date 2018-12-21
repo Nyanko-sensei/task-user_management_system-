@@ -25,19 +25,20 @@ class UserController extends FOSRestController implements ClassResourceInterface
         UserRepository $userRepository,
         UserGroupRepository $userGroupRepository
     ) {
-        $this->entityManager       = $entityManager;
-        $this->userRepository      = $userRepository;
-        $this->userGroupRepository      = $userGroupRepository;
+        $this->entityManager = $entityManager;
+        $this->userRepository = $userRepository;
+        $this->userGroupRepository = $userGroupRepository;
     }
 
     public function cgetAction()
     {
         $users = $this->userRepository->findAll();
 
-        $serializer = new Serializer(array(new ObjectNormalizer()));
-        $data = $serializer->normalize($users, null, array('attributes' => array('username', 'UserGroups' => ['name'])));
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $data = $serializer->normalize($users, null, ['attributes' => ['username', 'UserGroups' => ['name']]]);
 
         $view = $this->view($data, 200);
+
         return $this->handleView($view);
     }
 
@@ -45,14 +46,15 @@ class UserController extends FOSRestController implements ClassResourceInterface
     {
         $user = $this->userRepository->find($userId);
 
-        if (!$user) {
+        if (! $user) {
             throw new HttpException(404, "User not found");
         }
 
-        $serializer = new Serializer(array(new ObjectNormalizer()));
-        $data = $serializer->normalize($user, null, array('attributes' => array('username', 'UserGroups' => ['name'])));
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $data = $serializer->normalize($user, null, ['attributes' => ['username', 'UserGroups' => ['name']]]);
 
         $view = $this->view($data, 200);
+
         return $this->handleView($view);
     }
 
@@ -60,7 +62,7 @@ class UserController extends FOSRestController implements ClassResourceInterface
     {
         $user = $this->userRepository->find($userId);
 
-        if (!$user) {
+        if (! $user) {
             throw new HttpException(404, "User not found");
         }
 
@@ -68,10 +70,11 @@ class UserController extends FOSRestController implements ClassResourceInterface
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $serializer = new Serializer(array(new ObjectNormalizer()));
-        $data = $serializer->normalize($user, null, array('attributes' => array('username', 'UserGroups' => ['name'])));
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $data = $serializer->normalize($user, null, ['attributes' => ['username', 'UserGroups' => ['name']]]);
 
         $view = $this->view($data, 200);
+
         return $this->handleView($view);
     }
 
@@ -88,10 +91,11 @@ class UserController extends FOSRestController implements ClassResourceInterface
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $serializer = new Serializer(array(new ObjectNormalizer()));
-        $data = $serializer->normalize($user, null, array('attributes' => array('username', 'UserGroups' => ['name'])));
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $data = $serializer->normalize($user, null, ['attributes' => ['username', 'UserGroups' => ['name']]]);
 
         $view = $this->view($data, 200);
+
         return $this->handleView($view);
     }
 
@@ -105,6 +109,7 @@ class UserController extends FOSRestController implements ClassResourceInterface
 
         $view = new View([]);
         $view->setFormat('json');
+
         return $this->handleView($view);
     }
 
@@ -113,7 +118,7 @@ class UserController extends FOSRestController implements ClassResourceInterface
         $user = $this->userRepository->find($userId);
         $userGroup = $this->userGroupRepository->find($groupId);
 
-        if (!$user || !$userGroup) {
+        if (! $user || ! $userGroup) {
             throw new HttpException(404, "User or group not found");
         }
 
@@ -121,10 +126,11 @@ class UserController extends FOSRestController implements ClassResourceInterface
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $serializer = new Serializer(array(new ObjectNormalizer()));
-        $data = $serializer->normalize($user, null, array('attributes' => array('username', 'UserGroups' => ['name'])));
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $data = $serializer->normalize($user, null, ['attributes' => ['username', 'UserGroups' => ['name']]]);
 
         $view = $this->view($data, 200);
+
         return $this->handleView($view);
     }
 
@@ -134,7 +140,7 @@ class UserController extends FOSRestController implements ClassResourceInterface
         $user = $this->userRepository->find($userId);
         $userGroup = $this->userGroupRepository->find($groupId);
 
-        if (!$user || !$userGroup) {
+        if (! $user || ! $userGroup) {
             throw new HttpException(404, "User or group not found");
         }
 
@@ -142,10 +148,11 @@ class UserController extends FOSRestController implements ClassResourceInterface
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $serializer = new Serializer(array(new ObjectNormalizer()));
-        $data = $serializer->normalize($user, null, array('attributes' => array('username', 'UserGroups' => ['name'])));
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $data = $serializer->normalize($user, null, ['attributes' => ['username', 'UserGroups' => ['name']]]);
 
         $view = $this->view($data, 200);
+
         return $this->handleView($view);
     }
 }

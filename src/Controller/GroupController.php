@@ -25,9 +25,9 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
         UserGroupRepository $userGroupRepository,
         UserRepository $userRepository
     ) {
-        $this->entityManager       = $entityManager;
+        $this->entityManager = $entityManager;
         $this->userGroupRepository = $userGroupRepository;
-        $this->userRepository      = $userRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function cgetAction()
@@ -36,6 +36,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
 
         $view = new View($userGroups);
         $view->setFormat('json');
+
         return $this->handleView($view);
     }
 
@@ -43,12 +44,13 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
     {
         $userGroup = $this->userGroupRepository->find($userGroupId);
 
-        if (!$userGroup) {
+        if (! $userGroup) {
             throw new HttpException(404, "User group not found");
         }
 
         $view = new View($userGroup);
         $view->setFormat('json');
+
         return $this->handleView($view);
     }
 
@@ -56,7 +58,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
     {
         $userGroup = $this->userGroupRepository->find($userGroupId);
 
-        if (!$userGroup) {
+        if (! $userGroup) {
             throw new HttpException(404, "User not found");
         }
 
@@ -66,6 +68,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
 
         $view = new View($userGroup);
         $view->setFormat('json');
+
         return $this->handleView($view);
     }
 
@@ -84,6 +87,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
 
         $view = new View($userGroup);
         $view->setFormat('json');
+
         return $this->handleView($view);
     }
 
@@ -102,16 +106,16 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
 
         $view = new View([]);
         $view->setFormat('json');
+
         return $this->handleView($view);
     }
-
 
     public function linkUserGroupUserAction(int $groupId, int $userId)
     {
         $user = $this->userRepository->find($userId);
         $userGroup = $this->userGroupRepository->find($groupId);
 
-        if (!$user || !$userGroup) {
+        if (! $user || ! $userGroup) {
             throw new HttpException(404, "User or group not found");
         }
 
@@ -119,10 +123,11 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
         $this->entityManager->persist($userGroup);
         $this->entityManager->flush();
 
-        $serializer = new Serializer(array(new ObjectNormalizer()));
-        $data = $serializer->normalize($userGroup , null, array('attributes' => array('name', 'Users' => ['username'])));
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $data = $serializer->normalize($userGroup, null, ['attributes' => ['name', 'Users' => ['username']]]);
 
         $view = $this->view($data, 200);
+
         return $this->handleView($view);
     }
 
@@ -132,7 +137,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
         $user = $this->userRepository->find($userId);
         $userGroup = $this->userGroupRepository->find($groupId);
 
-        if (!$user || !$userGroup) {
+        if (! $user || ! $userGroup) {
             throw new HttpException(404, "User or group not found");
         }
 
@@ -140,11 +145,11 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
         $this->entityManager->persist($userGroup);
         $this->entityManager->flush();
 
-        $serializer = new Serializer(array(new ObjectNormalizer()));
-        $data = $serializer->normalize($userGroup , null, array('attributes' => array('name', 'Users' => ['username'])));
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $data = $serializer->normalize($userGroup, null, ['attributes' => ['name', 'Users' => ['username']]]);
 
         $view = $this->view($data, 200);
+
         return $this->handleView($view);
     }
-
 }
